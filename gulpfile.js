@@ -12,7 +12,7 @@ const autoprefixer = require('gulp-autoprefixer');
 const imagemin = require('gulp-imagemin');
 const htmlmin = require('gulp-htmlmin');
 const newer = require('gulp-newer');
-const browserSync = require('browser-sync').create();
+const browsersync = require('browser-sync').create();
 
 // Пути сохранения
 const paths = {
@@ -46,7 +46,7 @@ function html() {
     .pipe(gulp.dest((paths.html.dest)))
     .pipe(browsersync.stream())
 }
-
+``
 // Компилятор стилей
 function styles() {
     return gulp.src(paths.styles.src)
@@ -95,10 +95,11 @@ function img() {
 function watch() {
     browsersync.init({
         server: {
-            baseDir: './src/'
+            baseDir: './dist/'
         }
     })
-    gulp.watch(paths.html.src).on('change', browsersync.reload())
+    gulp.watch(paths.html.dest).on('change', browsersync.reload)
+    gulp.watch(paths.html.src, html)
     gulp.watch(paths.styles.src, styles)
     gulp.watch(paths.scripts.src, scripts)
 }
