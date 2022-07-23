@@ -12,6 +12,7 @@ const autoprefixer = require('gulp-autoprefixer');
 const imagemin = require('gulp-imagemin');
 const htmlmin = require('gulp-htmlmin');
 const newer = require('gulp-newer');
+const browserSync = require('browser-sync').create();
 
 // Пути сохранения
 const paths = {
@@ -42,7 +43,8 @@ function clean() {
 function html() {
     return gulp.src(paths.html.src)
     .pipe(htmlmin({ collapseWhitespace: true }))
-    .pipe(gulp.dest((paths.html.dest)));
+    .pipe(gulp.dest((paths.html.dest)))
+    .pipe(browsersync.stream())
 }
 
 // Компилятор стилей
@@ -62,6 +64,7 @@ function styles() {
     }))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(paths.styles.dest))
+    .pipe(browsersync.stream())
 }
 
 // Компилятор скриптов
@@ -74,6 +77,7 @@ function scripts() {
     .pipe(concat('main.min.js'))
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(paths.scripts.dest))
+    .pipe(browsersync.stream())
 }
 
 
@@ -89,6 +93,12 @@ function img() {
 
 // Автоматический просмотр изменений
 function watch() {
+    browsersync.init({
+        server: {
+            baseDir: './src/'
+        }
+    })
+    gulp.watch(paths.html.src).on('change', browsersync.reload())
     gulp.watch(paths.styles.src, styles)
     gulp.watch(paths.scripts.src, scripts)
 }
