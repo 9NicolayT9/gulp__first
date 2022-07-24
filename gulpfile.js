@@ -31,6 +31,10 @@ const paths = {
     img: {
         src: 'src/Photos/**',
         dest: 'dist/Photos/',
+    },
+    fonts: {
+        src: 'src/Fonts/**',
+        dest: 'dist/Fonts/'
     }
 }
 
@@ -80,6 +84,11 @@ function scripts() {
     .pipe(browsersync.stream())
 }
 
+// Компилятор Шрифтов
+function fonts() {
+    return gulp.src(paths.fonts.src)
+    .pipe(gulp.dest(paths.fonts.dest))
+}
 
 // Сжатие картинок
 function img() {
@@ -102,16 +111,18 @@ function watch() {
     gulp.watch(paths.html.src, html)
     gulp.watch(paths.styles.src, styles)
     gulp.watch(paths.scripts.src, scripts)
+    gulp.watch(paths.fonts.src, fonts)
     gulp.watch(paths.img.src, img)
 }
 
 // Операции сборки
-const build = gulp.series(clean, html, gulp.parallel(styles, scripts, img), watch)
+const build = gulp.series(clean, html, gulp.parallel(styles, scripts, fonts, img), watch)
 
 exports.clean = clean
 exports.html = html
 exports.img = img
 exports.styles = styles
 exports.scripts = scripts
+exports.fonts = fonts
 exports.watch = watch
 exports.default = build
