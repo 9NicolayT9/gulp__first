@@ -21,7 +21,7 @@ const paths = {
         dest: 'dist/'
     },
     styles: {
-        src: 'src/Styles/**/*.sass',
+        src: ['src/Styles/**/*.sass', 'src/Styles/**/*.scss'],
         dest: 'dist/Styles/'
     },
     scripts: {
@@ -29,7 +29,7 @@ const paths = {
         dest: 'dist/Scripts/'
     },
     img: {
-        src: 'src/Photos/*',
+        src: 'src/Photos/**',
         dest: 'dist/Photos/',
     }
 }
@@ -51,7 +51,7 @@ function html() {
 function styles() {
     return gulp.src(paths.styles.src)
     .pipe(sourcemaps.init())
-    .pipe(sass())
+    .pipe(sass().on('error', sass.logError))
     .pipe(autoprefixer({
         cascade: false
     }))
@@ -102,6 +102,7 @@ function watch() {
     gulp.watch(paths.html.src, html)
     gulp.watch(paths.styles.src, styles)
     gulp.watch(paths.scripts.src, scripts)
+    gulp.watch(paths.img.src, img)
 }
 
 // Операции сборки
